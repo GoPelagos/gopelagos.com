@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="Pelagos — Markets · Engineering · Research"/>
+  <meta name="theme-color" content="#020b17"/>
+  <title>Pelagos</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=4">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png?v=4">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=4">
+  <link rel="stylesheet" href="styles.css?v=2">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8a523b7c-15fa-4d4a-b00f-a8d86ff18659"></script>
+</head>
+<body class="theme-dark">
+  <main class="splash" aria-labelledby="pelagos-title">
+    <div class="grid" aria-hidden="true"></div>
+    <div class="bathymetry" aria-hidden="true"></div>
+    <section class="identity">
+      <img id="pelagos-title" class="logo logo-dark-mode" src="assets/pelagos-logo-light.png" alt="Pelagos"/>
+      <img class="logo logo-light-mode" src="assets/pelagos-logo-dark.png" alt="" aria-hidden="true"/>
+    </section>
+    <footer class="footer">
+      <p class="location">Vancouver, British Columbia</p>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="copyright">© 2026 Pelagos Corporation</p>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const layer = document.querySelector('.bathymetry');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const desktop = window.matchMedia('(hover: hover) and (pointer: fine)');
+      if (!layer || reduced.matches || !desktop.matches) return;
+      const max = 10;
+      let tx = 0, ty = 0, x = 0, y = 0;
+      window.addEventListener('pointermove', (e) => {
+        tx = ((e.clientX / innerWidth) - 0.5) * 2 * max;
+        ty = ((e.clientY / innerHeight) - 0.5) * 2 * max;
+      }, { passive: true });
+      document.documentElement.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
+      function frame() {
+        x += (tx - x) * 0.045;
+        y += (ty - y) * 0.045;
+        layer.style.setProperty('--parallax-x', `${x.toFixed(2)}px`);
+        layer.style.setProperty('--parallax-y', `${y.toFixed(2)}px`);
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+</body>
+</html>
